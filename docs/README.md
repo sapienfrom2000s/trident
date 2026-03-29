@@ -6,6 +6,8 @@ A simple CI/CD software
 
 ## Tech Stack
 
+Backend - Go
+Frontend - Svelte + TS
 
 ## Scope
 
@@ -35,7 +37,7 @@ A simple CI/CD software
 
 ### Pipeline Definition
 
-- [ ] .ten.yml file in repo root
+- [ ] .aegis.yml file in repo root
 - [ ] Sequential steps only
 
 ### Dashboard
