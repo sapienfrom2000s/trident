@@ -2,7 +2,7 @@ A simple CI/CD software
 
 ## Architecture
 
-![Aegis Architecture](assets/architecture.png)
+![Trident Architecture](assets/architecture.png)
 
 ## Tech Stack
 
@@ -37,7 +37,7 @@ A simple CI/CD software
 
 ### Pipeline Definition
 
-- [ ] .aegis.yml file in repo root
+- [ ] .trident.yml file in repo root
 - [ ] Sequential steps only
 
 ### Dashboard

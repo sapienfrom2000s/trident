@@ -6,3 +6,6 @@ Specs around events(webhook) coming from github. Obviously, we will be mocking t
 2. Parse the fields sent by github.
   1. Success
   2. Failure
+3. Validate the fields sent by github.
+  1. Success
+  2. Failure
