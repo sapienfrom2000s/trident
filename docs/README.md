@@ -6,8 +6,8 @@ A simple CI/CD software
 
 ## Tech Stack
 
-Backend - Go
-Frontend - Svelte + TS
+- Backend - Go
+- Frontend - Mithril.js
 
 ## Scope
 
