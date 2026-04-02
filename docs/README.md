@@ -1,5 +1,9 @@
 A simple CI/CD software
 
+## For AI Agents
+
+Please go through .cursor/rules.md
+
 ## Architecture
 
 ![Trident Architecture](assets/architecture.png)
