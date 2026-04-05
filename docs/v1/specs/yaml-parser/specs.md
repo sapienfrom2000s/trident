@@ -4,6 +4,16 @@ Only sequential commands are allowed right now
 - some other command
 - ...
 
+From user perspective he should be able to run it in the following
+way:
+
+- script.csh
+
+```
+# script.csh
+#!/bin/csh
+echo "Hello World!"
+```
 
 Specs:
 

@@ -4,13 +4,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sapienfrom2000s/trident/backend/internal/server"
+	"github.com/sapienfrom2000s/trident/backend/internal/core"
 	"github.com/sapienfrom2000s/trident/backend/internal/storage/sqlite"
-	"github.com/sapienfrom2000s/trident/backend/internal/webhook"
 )
 
 func TestEventStorer(t *testing.T) {
-	validEvent := webhook.NormalizedEvent{
+	validEvent := core.NormalizedEvent{
 		RepoName:  "octocat/Hello-World",
 		CommitSha: "9fceb02d0ae5",
 		Branch:    "main",
@@ -18,18 +17,18 @@ func TestEventStorer(t *testing.T) {
 		Provider:  "github",
 	}
 
-	branchNotAvailableInEvent := webhook.NormalizedEvent{
+	branchNotAvailableInEvent := core.NormalizedEvent{
 		RepoName:  "octocat/Hello-World",
 		CommitSha: "9fceb02d0ae5",
 		Author:    "Monalisa Octocat",
 		Provider:  "github",
 	}
 
-	emptyEvent := webhook.NormalizedEvent{}
+	emptyEvent := core.NormalizedEvent{}
 
 	tests := []struct {
 		name            string
-		normalizedEvent webhook.NormalizedEvent
+		normalizedEvent core.NormalizedEvent
 		want            bool
 	}{
 		{
@@ -60,7 +59,7 @@ func TestEventStorer(t *testing.T) {
 }
 
 func TestStoreJob(t *testing.T) {
-	validJob := server.Job{
+	validJob := core.Job{
 		EventId:       1,
 		Status:        "waiting",
 		CreatedAt:     time.Now(),
@@ -69,7 +68,7 @@ func TestStoreJob(t *testing.T) {
 		ExecutionTime: nil,
 	}
 
-	emptyStatusJob := server.Job{
+	emptyStatusJob := core.Job{
 		EventId:       1,
 		Status:        "",
 		CreatedAt:     time.Now(),
@@ -80,7 +79,7 @@ func TestStoreJob(t *testing.T) {
 
 	tests := []struct {
 		name string
-		job  server.Job
+		job  core.Job
 		want bool
 	}{
 		{
@@ -97,7 +96,7 @@ func TestStoreJob(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := sqlite.StoreJob(validJob)
+			got, err := sqlite.StoreJob(tt.job)
 			if got != tt.want {
 				t.Errorf("Got %v, Want %v. Error: %v", got, tt.want, err)
 			}

@@ -5,11 +5,3 @@ package webhook
 // 	ParseEvent(b []byte) (NormalizedEvent, error)
 // 	Validate(n NormalizedEvent) error
 // }
-
-type NormalizedEvent struct {
-	RepoName  string
-	CommitSha string
-	Branch    string
-	Author    string
-	Provider  string
-}
