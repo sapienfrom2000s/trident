@@ -10,6 +10,13 @@ import (
 	"github.com/sapienfrom2000s/trident/backend/internal/core"
 )
 
+type Handler struct {
+	ValidateSignature func([]byte, http.Header, string) error
+}
+
+func (h *Handler) HandleWebhook(w http.ResponseWriter, r *http.Request) {
+}
+
 func ValidateSignature(b []byte, headers http.Header, secret string) error {
 	sig := headers.Get("X-Hub-Signature-256")
 	if sig == "" {
