@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/sapienfrom2000s/trident/backend/internal/core"
+	"github.com/sapienfrom2000s/trident/backend/internal/webhook"
 	"github.com/sapienfrom2000s/trident/backend/internal/webhook/github"
 )
 
@@ -158,11 +159,10 @@ func TestGithubWebhookHandler(t *testing.T) {
     `)
 	body := bytes.NewBuffer(validPayload)
 	req := httptest.NewRequest(http.MethodPost, "/webhook/github", body)
-	// mock Github secret verification
 	req.Header.Add("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
 
-	gh := github.Handler{
+	var gh webhook.Webhook = &github.Handler{
 		ValidateSignature: func(b []byte, h http.Header, s string) error { return nil },
 	}
 
@@ -172,5 +172,4 @@ func TestGithubWebhookHandler(t *testing.T) {
 			t.Errorf("Expected: 200, Got: %v", rec.Result().StatusCode)
 		}
 	})
-	// also check if this increases job count by 1 in db
 }

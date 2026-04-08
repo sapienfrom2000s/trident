@@ -1,7 +1,9 @@
 package webhook
 
-// will add it when gitlab or other remote scm is introduced
-// type Event interface {
-// 	ParseEvent(b []byte) (NormalizedEvent, error)
-// 	Validate(n NormalizedEvent) error
-// }
+import "net/http"
+
+// It's an overkill for a single storage backend.
+// Doing this for learning purposes
+type Webhook interface {
+	HandleWebhook(w http.ResponseWriter, r *http.Request)
+}

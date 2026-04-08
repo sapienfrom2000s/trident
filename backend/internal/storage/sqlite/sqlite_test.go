@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/sapienfrom2000s/trident/backend/internal/core"
+	"github.com/sapienfrom2000s/trident/backend/internal/storage"
 	"github.com/sapienfrom2000s/trident/backend/internal/storage/sqlite"
 )
 
@@ -50,6 +51,7 @@ func TestEventStorer(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			var sqlite storage.Storer = sqlite.New(nil)
 			got, err := sqlite.StoreEvent(tt.normalizedEvent)
 			if got != tt.want {
 				t.Errorf("Got: %v, Want: %v. Error: %v", got, tt.want, err)
@@ -96,6 +98,7 @@ func TestStoreJob(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			var sqlite storage.Storer = sqlite.New(nil)
 			got, err := sqlite.StoreJob(tt.job)
 			if got != tt.want {
 				t.Errorf("Got %v, Want %v. Error: %v", got, tt.want, err)
