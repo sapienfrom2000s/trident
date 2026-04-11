@@ -4,7 +4,9 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/sapienfrom2000s/trident/backend/internal/core"
@@ -14,7 +16,25 @@ type Handler struct {
 	ValidateSignature func([]byte, http.Header, string) error
 }
 
-func (h *Handler) HandleWebhook(w http.ResponseWriter, r *http.Request) {
+type GitHubPushEvent struct {
+	After      string `json:"after"`
+	Ref        string `json:"ref"`
+	Repository struct {
+		FullName string `json:"full_name"`
+	} `json:"repository"`
+	HeadCommit struct {
+		Author struct {
+			Name string `json:"name"`
+		} `json:"author"`
+	} `json:"head_commit"`
+}
+
+func (h *Handler) WebhookHandler(w http.ResponseWriter, r *http.Request) {
+	var pushEvent GitHubPushEvent = GitHubPushEvent{}
+	pushEventInBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		json.Unmarshal(pushEventInBytes, &pushEvent)
+	}
 }
 
 func ValidateSignature(b []byte, headers http.Header, secret string) error {

@@ -166,7 +166,7 @@ func TestGithubWebhookHandler(t *testing.T) {
 		ValidateSignature: func(b []byte, h http.Header, s string) error { return nil },
 	}
 
-	gh.HandleWebhook(rec, req)
+	gh.WebhookHandler(rec, req)
 	t.Run("Check for Status Code 200", func(t *testing.T) {
 		if rec.Result().StatusCode != 200 {
 			t.Errorf("Expected: 200, Got: %v", rec.Result().StatusCode)
