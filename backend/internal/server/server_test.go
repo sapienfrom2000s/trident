@@ -20,10 +20,11 @@ func TestAgentHeartBeat(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/heartbeat", body)
 	rec := httptest.NewRecorder()
 
-	err := server.HeartBeatHandler(rec, req)
+	server.HeartBeatHandler(rec, req)
 	t.Run("Healthy Hearbeat", func(t *testing.T) {
-		if err != nil {
-			t.Errorf("Expected: No Error, Got: %v", err)
+		statusCode := rec.Result().StatusCode
+		if statusCode != 200 {
+			t.Errorf("Expected: 200, Got: %v", statusCode)
 		}
 	})
 }
