@@ -9,7 +9,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/sapienfrom2000s/trident/backend/internal/core"
+	"github.com/sapienfrom2000s/trident/backend/internal/core/models"
 )
 
 type Handler struct {
@@ -53,6 +53,6 @@ func ValidateSignature(b []byte, headers http.Header, secret string) error {
 	return nil
 }
 
-func ParseEvent(b []byte, headers http.Header) (core.NormalizedEvent, error) {
-	return core.NormalizedEvent{}, nil
+func ParseEvent(b []byte, headers http.Header) (models.Event, error) {
+	return models.Event{}, nil
 }

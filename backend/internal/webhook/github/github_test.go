@@ -10,7 +10,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/sapienfrom2000s/trident/backend/internal/core"
+	"github.com/sapienfrom2000s/trident/backend/internal/core/models"
 	"github.com/sapienfrom2000s/trident/backend/internal/webhook"
 	"github.com/sapienfrom2000s/trident/backend/internal/webhook/github"
 )
@@ -98,14 +98,14 @@ func TestParseGithubPayload(t *testing.T) {
 		name    string
 		payload []byte
 		headers http.Header
-		want    core.NormalizedEvent
+		want    models.Event
 		err     bool
 	}{
 		{
 			name:    "valid json",
 			payload: validPayload,
 			headers: pushHeaders,
-			want: core.NormalizedEvent{
+			want: models.Event{
 				RepoName:  "octocat/Hello-World",
 				CommitSha: "9fceb02d0ae5",
 				Branch:    "main",

@@ -4,13 +4,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sapienfrom2000s/trident/backend/internal/core"
+	"github.com/sapienfrom2000s/trident/backend/internal/core/models"
 	"github.com/sapienfrom2000s/trident/backend/internal/storage"
 	"github.com/sapienfrom2000s/trident/backend/internal/storage/sqlite"
 )
 
 func TestEventStorer(t *testing.T) {
-	validEvent := core.NormalizedEvent{
+	validEvent := models.Event{
 		RepoName:  "octocat/Hello-World",
 		CommitSha: "9fceb02d0ae5",
 		Branch:    "main",
@@ -18,41 +18,41 @@ func TestEventStorer(t *testing.T) {
 		Provider:  "github",
 	}
 
-	branchNotAvailableInEvent := core.NormalizedEvent{
+	branchNotAvailableInEvent := models.Event{
 		RepoName:  "octocat/Hello-World",
 		CommitSha: "9fceb02d0ae5",
 		Author:    "Monalisa Octocat",
 		Provider:  "github",
 	}
 
-	emptyEvent := core.NormalizedEvent{}
+	emptyEvent := models.Event{}
 
 	tests := []struct {
-		name            string
-		normalizedEvent core.NormalizedEvent
-		want            bool
+		name  string
+		Event models.Event
+		want  bool
 	}{
 		{
-			name:            "Valid Event",
-			normalizedEvent: validEvent,
-			want:            true,
+			name:  "Valid Event",
+			Event: validEvent,
+			want:  true,
 		},
 		{
-			name:            "Invalid Event: Branch Not Available",
-			normalizedEvent: branchNotAvailableInEvent,
-			want:            false,
+			name:  "Invalid Event: Branch Not Available",
+			Event: branchNotAvailableInEvent,
+			want:  false,
 		},
 		{
-			name:            "Invalid Event: Empty Event",
-			normalizedEvent: emptyEvent,
-			want:            false,
+			name:  "Invalid Event: Empty Event",
+			Event: emptyEvent,
+			want:  false,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var sqlite storage.Storer = sqlite.New(nil)
-			got, err := sqlite.StoreEvent(tt.normalizedEvent)
+			got, err := sqlite.StoreEvent(tt.Event)
 			if got != tt.want {
 				t.Errorf("Got: %v, Want: %v. Error: %v", got, tt.want, err)
 			}
@@ -61,7 +61,7 @@ func TestEventStorer(t *testing.T) {
 }
 
 func TestStoreJob(t *testing.T) {
-	validJob := core.Job{
+	validJob := models.Job{
 		EventId:       1,
 		Status:        "waiting",
 		CreatedAt:     time.Now(),
@@ -70,7 +70,7 @@ func TestStoreJob(t *testing.T) {
 		ExecutionTime: nil,
 	}
 
-	emptyStatusJob := core.Job{
+	emptyStatusJob := models.Job{
 		EventId:       1,
 		Status:        "",
 		CreatedAt:     time.Now(),
@@ -81,7 +81,7 @@ func TestStoreJob(t *testing.T) {
 
 	tests := []struct {
 		name string
-		job  core.Job
+		job  models.Job
 		want bool
 	}{
 		{

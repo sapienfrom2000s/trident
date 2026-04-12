@@ -2,7 +2,7 @@ Add generic adapter to make sure that multiple vendors are supported. We normali
 and then use it. The struct structure might look something like the following:
 
 ```
-NormalizedEvent {
+Event {
   repo_url      string(mandatory)
   repo_name     string(mandatory)
   commit_sha    string(mandatory)
