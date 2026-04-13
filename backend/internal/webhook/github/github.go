@@ -10,10 +10,12 @@ import (
 	"net/http"
 
 	"github.com/sapienfrom2000s/trident/backend/internal/core/models"
+	"gorm.io/gorm"
 )
 
 type Handler struct {
 	ValidateSignature func([]byte, http.Header, string) error
+	DB                *gorm.DB
 }
 
 type GitHubPushEvent struct {

@@ -13,6 +13,8 @@ import (
 	"github.com/sapienfrom2000s/trident/backend/internal/core/models"
 	"github.com/sapienfrom2000s/trident/backend/internal/webhook"
 	"github.com/sapienfrom2000s/trident/backend/internal/webhook/github"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func signPayload(secret string, payload []byte) string {
@@ -162,14 +164,51 @@ func TestGithubWebhookHandler(t *testing.T) {
 	req.Header.Add("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
 
+	db := setupTestDB(t)
+
 	var gh webhook.Webhook = &github.Handler{
 		ValidateSignature: func(b []byte, h http.Header, s string) error { return nil },
+		DB:                db,
 	}
 
-	gh.WebhookHandler(rec, req)
 	t.Run("Check for Status Code 200", func(t *testing.T) {
+		t.Cleanup(func() { db.Exec("DELETE FROM events") })
+
+		gh.WebhookHandler(rec, req)
+
 		if rec.Result().StatusCode != 200 {
 			t.Errorf("Expected: 200, Got: %v", rec.Result().StatusCode)
 		}
+
+		var eventsCount int64
+		db.Model(&models.Event{}).Count(&eventsCount)
+
+		if eventsCount != 1 {
+			t.Errorf("Expected Events Count: 1, Got %v", eventsCount)
+		}
 	})
+}
+
+func setupTestDB(t *testing.T) *gorm.DB {
+	t.Helper()
+
+	// FIX: paralell tests might override each other. Different file names should be used for each test.
+	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
+	if err != nil {
+		t.Fatalf("failed to open test db: %v", err)
+	}
+
+	err = db.AutoMigrate(&models.Event{})
+	if err != nil {
+		t.Fatalf("failed to migrate test db: %v", err)
+	}
+
+	t.Cleanup(func() {
+		sqlDB, err := db.DB()
+		if err == nil {
+			sqlDB.Close()
+		}
+	})
+
+	return db
 }
