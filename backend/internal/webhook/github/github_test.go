@@ -80,11 +80,11 @@ func TestParseGithubPayload(t *testing.T) {
 			"after": "9fceb02d0ae5",
 			"ref": "refs/heads/main",
 			"repository": {
-		    "full_name": "octocat/Hello-World",
+		    "full_name": "octocat/Hello-World"
 		  },
 		  "head_commit": {
 		    "author": {
-		      "name": "Monalisa Octocat",
+		      "name": "Monalisa Octocat"
 		    }
 		  }
 		}
@@ -132,7 +132,7 @@ func TestParseGithubPayload(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := github.ParseEvent(tt.payload, tt.headers)
+			got, err := github.ParseEvent(tt.payload)
 			errBool := (err != nil)
 			if tt.err != errBool {
 				t.Errorf("Error: %v", err)
