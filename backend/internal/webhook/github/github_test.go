@@ -193,6 +193,7 @@ func setupTestDB(t *testing.T) *gorm.DB {
 	t.Helper()
 
 	// FIX: paralell tests might override each other. Different file names should be used for each test.
+	// cache=shared -> Multiple connections can access the same in-memory database
 	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
 	if err != nil {
 		t.Fatalf("failed to open test db: %v", err)

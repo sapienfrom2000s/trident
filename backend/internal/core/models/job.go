@@ -9,6 +9,7 @@ type Job struct {
 	ScheduledAt time.Time
 
 	// Using pointers to support null values
+	Pid           *int
 	StartedAt     *time.Time
 	ExecutionTime *time.Duration
 }

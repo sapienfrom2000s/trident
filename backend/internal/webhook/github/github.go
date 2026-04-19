@@ -42,11 +42,13 @@ func (h *Handler) WebhookHandler(w http.ResponseWriter, r *http.Request) {
 	event, err := ParseEvent(pushEventInBytes)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	createEvent := h.DB.Create(&event)
 	if createEvent.Error != nil {
 		http.Error(w, "failed to create Event", http.StatusInternalServerError)
+		return
 	}
 	w.WriteHeader(http.StatusOK)
 }
@@ -95,4 +97,8 @@ func ParseEvent(b []byte) (models.Event, error) {
 func pluckBranchFromRef(ref string) string {
 	const refPrefix = "refs/heads/"
 	return strings.TrimPrefix(ref, refPrefix)
+}
+
+func CloneRepoToDisk(token, branch, repoName, destination string) error {
+	return fmt.Errorf("No implementation error")
 }
