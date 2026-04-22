@@ -116,3 +116,41 @@ func setupTestDB(t *testing.T) *gorm.DB {
 
 	return db
 }
+
+func TestRunJob(t *testing.T) {
+	type tests struct {
+		name    string
+		params  []string
+		wantErr bool
+	}
+
+	suite := []tests{
+		{
+			name:    "Single Command",
+			params:  []string{"echo Hello World"},
+			wantErr: false,
+		},
+		{
+			name:    "Bad Command",
+			params:  []string{"eche Hello World"},
+			wantErr: true,
+		},
+		{
+			name:    "Multiple Commands",
+			params:  []string{"echo Hello World", "ls"},
+			wantErr: false,
+		},
+	}
+
+	for _, test := range suite {
+		t.Run(test.name, func(t *testing.T) {
+			err := job.RunJob(test.params)
+
+			gotErr := err != nil
+
+			if test.wantErr != gotErr {
+				t.Errorf("Want %v, got %v", test.wantErr, gotErr)
+			}
+		})
+	}
+}
